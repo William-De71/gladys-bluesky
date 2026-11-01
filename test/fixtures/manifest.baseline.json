@@ -1,0 +1,442 @@
+{
+  "manifest": {
+    "config_schema": [
+      {
+        "key": "intro",
+        "type": "section"
+      },
+      {
+        "key": "identifier",
+        "type": "string"
+      },
+      {
+        "key": "app_password",
+        "type": "secret"
+      },
+      {
+        "key": "service",
+        "type": "string"
+      },
+      {
+        "key": "link_help",
+        "type": "section"
+      },
+      {
+        "key": "receive_messages",
+        "type": "boolean"
+      },
+      {
+        "key": "forward_messages",
+        "type": "boolean"
+      },
+      {
+        "key": "check_interval",
+        "type": "select"
+      },
+      {
+        "key": "watch_notifications",
+        "type": "boolean"
+      },
+      {
+        "key": "language",
+        "type": "select"
+      }
+    ],
+    "actions": ["test_connection"],
+    "action_fields": {
+      "test_connection": []
+    },
+    "widgets": [
+      {
+        "key": "account",
+        "settings": [],
+        "options": {}
+      },
+      {
+        "key": "notifications",
+        "settings": ["include_likes"],
+        "options": {}
+      },
+      {
+        "key": "messages",
+        "settings": ["show_text"],
+        "options": {}
+      }
+    ],
+    "scene_triggers": [
+      {
+        "key": "mention_received",
+        "fields": [
+          {
+            "key": "author_handle",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "author_handle",
+            "type": "string"
+          },
+          {
+            "key": "author_name",
+            "type": "string"
+          },
+          {
+            "key": "author_did",
+            "type": "string"
+          },
+          {
+            "key": "text",
+            "type": "string"
+          },
+          {
+            "key": "post_uri",
+            "type": "string"
+          },
+          {
+            "key": "post_url",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "reply_received",
+        "fields": [
+          {
+            "key": "author_handle",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "author_handle",
+            "type": "string"
+          },
+          {
+            "key": "author_name",
+            "type": "string"
+          },
+          {
+            "key": "author_did",
+            "type": "string"
+          },
+          {
+            "key": "text",
+            "type": "string"
+          },
+          {
+            "key": "post_uri",
+            "type": "string"
+          },
+          {
+            "key": "post_url",
+            "type": "string"
+          },
+          {
+            "key": "subject_uri",
+            "type": "string"
+          },
+          {
+            "key": "subject_url",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "quote_received",
+        "fields": [
+          {
+            "key": "author_handle",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "author_handle",
+            "type": "string"
+          },
+          {
+            "key": "author_name",
+            "type": "string"
+          },
+          {
+            "key": "author_did",
+            "type": "string"
+          },
+          {
+            "key": "text",
+            "type": "string"
+          },
+          {
+            "key": "post_uri",
+            "type": "string"
+          },
+          {
+            "key": "post_url",
+            "type": "string"
+          },
+          {
+            "key": "subject_uri",
+            "type": "string"
+          },
+          {
+            "key": "subject_url",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "new_follower",
+        "fields": [
+          {
+            "key": "author_handle",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "author_handle",
+            "type": "string"
+          },
+          {
+            "key": "author_name",
+            "type": "string"
+          },
+          {
+            "key": "author_did",
+            "type": "string"
+          },
+          {
+            "key": "profile_url",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "like_received",
+        "fields": [
+          {
+            "key": "author_handle",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "author_handle",
+            "type": "string"
+          },
+          {
+            "key": "author_name",
+            "type": "string"
+          },
+          {
+            "key": "author_did",
+            "type": "string"
+          },
+          {
+            "key": "subject_uri",
+            "type": "string"
+          },
+          {
+            "key": "subject_url",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "repost_received",
+        "fields": [
+          {
+            "key": "author_handle",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "author_handle",
+            "type": "string"
+          },
+          {
+            "key": "author_name",
+            "type": "string"
+          },
+          {
+            "key": "author_did",
+            "type": "string"
+          },
+          {
+            "key": "subject_uri",
+            "type": "string"
+          },
+          {
+            "key": "subject_url",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "dm_received",
+        "fields": [
+          {
+            "key": "gladys_user",
+            "options": []
+          },
+          {
+            "key": "text",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "text",
+            "type": "string"
+          },
+          {
+            "key": "sender_handle",
+            "type": "string"
+          },
+          {
+            "key": "sender_name",
+            "type": "string"
+          },
+          {
+            "key": "sender_did",
+            "type": "string"
+          },
+          {
+            "key": "gladys_user",
+            "type": "string"
+          },
+          {
+            "key": "first_name",
+            "type": "string"
+          },
+          {
+            "key": "convo_id",
+            "type": "string"
+          },
+          {
+            "key": "message_id",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "dm_received_unlinked",
+        "fields": [
+          {
+            "key": "sender_handle",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "text",
+            "type": "string"
+          },
+          {
+            "key": "sender_handle",
+            "type": "string"
+          },
+          {
+            "key": "sender_name",
+            "type": "string"
+          },
+          {
+            "key": "sender_did",
+            "type": "string"
+          },
+          {
+            "key": "convo_id",
+            "type": "string"
+          },
+          {
+            "key": "message_id",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "message_not_sent",
+        "fields": [
+          {
+            "key": "reason",
+            "options": ["auth", "dm_scope", "recipient", "rate_limited", "network", "other"]
+          },
+          {
+            "key": "gladys_user",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "target",
+            "type": "string"
+          },
+          {
+            "key": "handle",
+            "type": "string"
+          },
+          {
+            "key": "gladys_user",
+            "type": "string"
+          },
+          {
+            "key": "first_name",
+            "type": "string"
+          },
+          {
+            "key": "reason",
+            "type": "string"
+          },
+          {
+            "key": "error",
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "scene_actions": [
+      {
+        "key": "publish_post",
+        "fields": ["text", "language", "reply_to", "image_url", "image_alt"],
+        "options": {},
+        "outputs": [
+          {
+            "key": "uri",
+            "type": "string"
+          },
+          {
+            "key": "url",
+            "type": "string"
+          },
+          {
+            "key": "cid",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "send_dm",
+        "fields": ["recipient", "text"],
+        "options": {},
+        "outputs": [
+          {
+            "key": "convo_id",
+            "type": "string"
+          },
+          {
+            "key": "message_id",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "delete_post",
+        "fields": ["post"],
+        "options": {},
+        "outputs": []
+      }
+    ]
+  }
+}

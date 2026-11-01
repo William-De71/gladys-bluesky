@@ -1,0 +1,1697 @@
+{
+  "manifest_version": 1,
+  "type": "communication",
+  "name": "Bluesky",
+  "description": {
+    "en": "Talk to Gladys in Bluesky direct messages, post from scenes, react to mentions and followers.",
+    "fr": "Parlez à Gladys en messages privés Bluesky, publiez depuis vos scènes, réagissez aux mentions.",
+    "de": "Mit Gladys per Bluesky-Direktnachricht chatten, aus Szenen posten, auf Erwähnungen reagieren.",
+    "es": "Hable con Gladys por mensajes directos de Bluesky, publique desde escenas, reaccione a menciones."
+  },
+  "version": "0.1.0",
+  "docker_image": "ghcr.io/william-de71/gladys-bluesky:0.1.0",
+  "gladys_version": ">=5.3.0",
+  "categories": ["notifications", "assistants"],
+  "keywords": [
+    "bsky",
+    "atproto",
+    "AT Protocol",
+    "réseau social",
+    "social network",
+    "direct messages",
+    "messages privés",
+    "chat",
+    "post"
+  ],
+  "transports": ["cloud"],
+  "cover_image": "https://raw.githubusercontent.com/William-De71/gladys-bluesky/main/cover.jpg",
+  "messaging": {
+    "receive": true
+  },
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": {
+        "en": "Bluesky account",
+        "fr": "Compte Bluesky",
+        "de": "Bluesky-Konto",
+        "es": "Cuenta de Bluesky"
+      },
+      "description": {
+        "en": "Unofficial integration, not affiliated with Bluesky Social PBC. Gladys uses one Bluesky account: ideally an account of the house (e.g. home-gladys.bsky.social), since everyone talking to Gladys writes to it. 1. In the Bluesky app, signed in with this account, open Settings → Privacy and security → App passwords → Add App Password. 2. Name it Gladys and check “Allow access to your direct messages” (without it, Gladys cannot read nor send direct messages). 3. Copy the password shown once, paste it below with the handle of the account, and save. Never enter the main password of the account.",
+        "fr": "Intégration non officielle, sans lien avec Bluesky Social PBC. Gladys utilise un compte Bluesky : idéalement un compte de la maison (ex. maison-gladys.bsky.social), puisque tous ceux qui parlent à Gladys lui écrivent. 1. Dans l’app Bluesky, connecté avec ce compte, ouvrez Réglages → Confidentialité et sécurité → Mots de passe d’application → Ajouter un mot de passe d’application. 2. Nommez-le Gladys et cochez « Autoriser l’accès à vos messages privés » (sans cela, Gladys ne peut ni lire ni envoyer de messages privés). 3. Copiez le mot de passe affiché une seule fois, collez-le ci-dessous avec le pseudo du compte et enregistrez. Ne saisissez jamais le mot de passe principal du compte.",
+        "de": "Inoffizielle Integration, ohne Verbindung zu Bluesky Social PBC. Gladys nutzt ein Bluesky-Konto: am besten ein Konto des Hauses (z. B. zuhause-gladys.bsky.social), denn alle, die mit Gladys schreiben, schreiben ihm. 1. Öffne in der Bluesky-App, mit diesem Konto angemeldet, Einstellungen → Privatsphäre und Sicherheit → App-Passwörter → App-Passwort hinzufügen. 2. Nenne es Gladys und aktiviere „Zugriff auf deine Direktnachrichten erlauben“ (sonst kann Gladys keine Direktnachrichten lesen oder senden). 3. Kopiere das einmalig angezeigte Passwort, füge es unten mit dem Handle des Kontos ein und speichere. Gib nie das Hauptpasswort des Kontos ein.",
+        "es": "Integración no oficial, sin relación con Bluesky Social PBC. Gladys usa una cuenta de Bluesky: idealmente una cuenta de la casa (p. ej. casa-gladys.bsky.social), ya que todos los que hablan con Gladys le escriben. 1. En la app de Bluesky, con esta cuenta, abra Ajustes → Privacidad y seguridad → Contraseñas de aplicación → Añadir contraseña de aplicación. 2. Llámela Gladys y marque «Permitir el acceso a tus mensajes directos» (sin ello, Gladys no puede leer ni enviar mensajes directos). 3. Copie la contraseña que se muestra una sola vez, péguela abajo con el alias de la cuenta y guarde. No introduzca nunca la contraseña principal de la cuenta."
+      },
+      "links": [
+        {
+          "url": "https://bsky.app/settings/app-passwords",
+          "label": {
+            "en": "App passwords",
+            "fr": "Mots de passe d’application",
+            "de": "App-Passwörter",
+            "es": "Contraseñas de aplicación"
+          }
+        },
+        {
+          "url": "https://bsky.app",
+          "label": {
+            "en": "Open Bluesky",
+            "fr": "Ouvrir Bluesky",
+            "de": "Bluesky öffnen",
+            "es": "Abrir Bluesky"
+          }
+        }
+      ]
+    },
+    {
+      "key": "identifier",
+      "type": "string",
+      "required": true,
+      "label": {
+        "en": "Handle or e-mail of the account",
+        "fr": "Pseudo ou e-mail du compte",
+        "de": "Handle oder E-Mail des Kontos",
+        "es": "Alias o correo de la cuenta"
+      },
+      "description": {
+        "en": "The handle without the @ (name.bsky.social, or your own domain), or the e-mail address of the account.",
+        "fr": "Le pseudo sans le @ (nom.bsky.social, ou votre propre domaine), ou l’adresse e-mail du compte.",
+        "de": "Das Handle ohne das @ (name.bsky.social oder deine eigene Domain) oder die E-Mail-Adresse des Kontos.",
+        "es": "El alias sin la @ (nombre.bsky.social, o su propio dominio), o la dirección de correo de la cuenta."
+      },
+      "placeholder": {
+        "en": "e.g. home-gladys.bsky.social",
+        "fr": "ex. maison-gladys.bsky.social",
+        "de": "z. B. zuhause-gladys.bsky.social",
+        "es": "p. ej. casa-gladys.bsky.social"
+      }
+    },
+    {
+      "key": "app_password",
+      "type": "secret",
+      "required": true,
+      "label": {
+        "en": "App password",
+        "fr": "Mot de passe d’application",
+        "de": "App-Passwort",
+        "es": "Contraseña de aplicación"
+      },
+      "description": {
+        "en": "Created in Settings → Privacy and security → App passwords, with access to direct messages. Stored encrypted, never shown again.",
+        "fr": "Créé dans Réglages → Confidentialité et sécurité → Mots de passe d’application, avec l’accès aux messages privés. Stocké chiffré, il n’est plus jamais affiché.",
+        "de": "Erstellt unter Einstellungen → Privatsphäre und Sicherheit → App-Passwörter, mit Zugriff auf Direktnachrichten. Wird verschlüsselt gespeichert und nie wieder angezeigt.",
+        "es": "Creada en Ajustes → Privacidad y seguridad → Contraseñas de aplicación, con acceso a los mensajes directos. Se guarda cifrada y no se vuelve a mostrar."
+      }
+    },
+    {
+      "key": "service",
+      "type": "string",
+      "label": {
+        "en": "Server (advanced)",
+        "fr": "Serveur (avancé)",
+        "de": "Server (erweitert)",
+        "es": "Servidor (avanzado)"
+      },
+      "description": {
+        "en": "Leave empty for an account created on bsky.social. For a self-hosted PDS, its https:// address.",
+        "fr": "Laissez vide pour un compte créé sur bsky.social. Pour un PDS auto-hébergé, son adresse https://.",
+        "de": "Leer lassen für ein auf bsky.social erstelltes Konto. Für einen selbst gehosteten PDS seine https://-Adresse.",
+        "es": "Déjelo vacío para una cuenta creada en bsky.social. Para un PDS autoalojado, su dirección https://."
+      },
+      "placeholder": {
+        "en": "https://bsky.social",
+        "fr": "https://bsky.social",
+        "de": "https://bsky.social",
+        "es": "https://bsky.social"
+      }
+    },
+    {
+      "key": "link_help",
+      "type": "section",
+      "label": {
+        "en": "Talk with Gladys",
+        "fr": "Discuter avec Gladys",
+        "de": "Mit Gladys schreiben",
+        "es": "Hablar con Gladys"
+      },
+      "description": {
+        "en": "Each user links their own Bluesky account once: “Link my account” below → “Generate a link code”, then send the code in a direct message to the account of the house. Then everything they write to it goes to Gladys, who answers there. The account of the house must accept their messages (Chat → ⚙ settings → Allow new messages from: Everyone, or follow them), and they must accept its messages to receive the alerts of Gladys. Messages of accounts that are not linked never reach Gladys: they only fire the scene trigger made for them.",
+        "fr": "Chaque utilisateur lie une fois son propre compte Bluesky : « Lier mon compte » ci-dessous → « Générer un code de liaison », puis il envoie le code en message privé au compte de la maison. Ensuite, tout ce qu’il lui écrit va à Gladys, qui répond au même endroit. Le compte de la maison doit accepter ses messages (Discussions → ⚙ réglages → Autoriser les nouveaux messages de : Tout le monde, ou s’abonner à lui), et lui doit accepter ceux du compte de la maison pour recevoir les alertes de Gladys. Les messages des comptes non liés n’atteignent jamais Gladys : ils déclenchent seulement le déclencheur de scène prévu pour eux.",
+        "de": "Jeder Benutzer verknüpft sein eigenes Bluesky-Konto einmal: „Mein Konto verknüpfen“ unten → „Verknüpfungscode generieren“, dann sendet er den Code per Direktnachricht an das Konto des Hauses. Danach geht alles, was er ihm schreibt, an Gladys, die dort antwortet. Das Konto des Hauses muss seine Nachrichten annehmen (Chat → ⚙ Einstellungen → Neue Nachrichten erlauben von: Allen, oder ihm folgen), und er muss die Nachrichten des Hauses annehmen, um die Meldungen von Gladys zu erhalten. Nachrichten nicht verknüpfter Konten erreichen Gladys nie: Sie lösen nur den dafür vorgesehenen Szenenauslöser aus.",
+        "es": "Cada usuario vincula una vez su propia cuenta de Bluesky: «Vincular mi cuenta» más abajo → «Generar un código de vinculación» y envía el código por mensaje directo a la cuenta de la casa. Después, todo lo que le escriba llega a Gladys, que responde allí. La cuenta de la casa debe aceptar sus mensajes (Chat → ⚙ ajustes → Permitir mensajes nuevos de: Todos, o seguirle), y él debe aceptar los de la casa para recibir los avisos de Gladys. Los mensajes de cuentas no vinculadas nunca llegan a Gladys: solo activan el disparador de escena previsto para ellos."
+      }
+    },
+    {
+      "key": "receive_messages",
+      "type": "boolean",
+      "default": true,
+      "label": {
+        "en": "Read the direct messages",
+        "fr": "Lire les messages privés",
+        "de": "Direktnachrichten lesen",
+        "es": "Leer los mensajes directos"
+      },
+      "description": {
+        "en": "Off: nobody can talk to Gladys nor link an account; Gladys can still send messages and alerts.",
+        "fr": "Désactivé : personne ne peut parler à Gladys ni lier un compte ; Gladys peut toujours envoyer messages et alertes.",
+        "de": "Aus: Niemand kann mit Gladys schreiben oder ein Konto verknüpfen; Gladys kann weiterhin Nachrichten und Meldungen senden.",
+        "es": "Desactivado: nadie puede hablar con Gladys ni vincular una cuenta; Gladys aún puede enviar mensajes y avisos."
+      }
+    },
+    {
+      "key": "forward_messages",
+      "type": "boolean",
+      "default": true,
+      "label": {
+        "en": "Send the direct messages to Gladys",
+        "fr": "Envoyer les messages privés à Gladys",
+        "de": "Direktnachrichten an Gladys senden",
+        "es": "Enviar los mensajes directos a Gladys"
+      },
+      "description": {
+        "en": "Off: the messages of linked users only reach the scenes, Gladys does not answer them.",
+        "fr": "Désactivé : les messages des utilisateurs liés n’atteignent que les scènes, Gladys n’y répond pas.",
+        "de": "Aus: Nachrichten verknüpfter Benutzer erreichen nur die Szenen, Gladys antwortet nicht darauf.",
+        "es": "Desactivado: los mensajes de los usuarios vinculados solo llegan a las escenas, Gladys no los responde."
+      }
+    },
+    {
+      "key": "check_interval",
+      "type": "select",
+      "default": "15",
+      "label": {
+        "en": "Check the direct messages every",
+        "fr": "Vérifier les messages privés toutes les",
+        "de": "Direktnachrichten prüfen alle",
+        "es": "Comprobar los mensajes directos cada"
+      },
+      "description": {
+        "en": "Bluesky offers no push to a home server: the integration asks regularly. Notifications are read every 30 s (60 s with the 60 s choice).",
+        "fr": "Bluesky ne pousse rien vers un serveur domestique : l’intégration demande régulièrement. Les notifications sont lues toutes les 30 s (60 s avec le choix 60 s).",
+        "de": "Bluesky schickt nichts an einen Heimserver: Die Integration fragt regelmäßig nach. Mitteilungen werden alle 30 s gelesen (60 s bei der Wahl 60 s).",
+        "es": "Bluesky no envía nada a un servidor doméstico: la integración pregunta con regularidad. Las notificaciones se leen cada 30 s (60 s con la opción de 60 s)."
+      },
+      "options": [
+        {
+          "value": "10",
+          "label": {
+            "en": "10 seconds",
+            "fr": "10 secondes",
+            "de": "10 Sekunden",
+            "es": "10 segundos"
+          }
+        },
+        {
+          "value": "15",
+          "label": {
+            "en": "15 seconds",
+            "fr": "15 secondes",
+            "de": "15 Sekunden",
+            "es": "15 segundos"
+          }
+        },
+        {
+          "value": "30",
+          "label": {
+            "en": "30 seconds",
+            "fr": "30 secondes",
+            "de": "30 Sekunden",
+            "es": "30 segundos"
+          }
+        },
+        {
+          "value": "60",
+          "label": {
+            "en": "1 minute",
+            "fr": "1 minute",
+            "de": "1 Minute",
+            "es": "1 minuto"
+          }
+        }
+      ]
+    },
+    {
+      "key": "watch_notifications",
+      "type": "boolean",
+      "default": true,
+      "label": {
+        "en": "Watch the notifications",
+        "fr": "Surveiller les notifications",
+        "de": "Mitteilungen überwachen",
+        "es": "Vigilar las notificaciones"
+      },
+      "description": {
+        "en": "Mentions, replies, quotes, new followers, likes and reposts: the scene triggers and the widgets. They stay unread in the Bluesky app.",
+        "fr": "Mentions, réponses, citations, nouveaux abonnés, j’aime et republications : les déclencheurs de scène et les widgets. Elles restent non lues dans l’app Bluesky.",
+        "de": "Erwähnungen, Antworten, Zitate, neue Follower, Likes und Reposts: die Szenenauslöser und die Widgets. Sie bleiben in der Bluesky-App ungelesen.",
+        "es": "Menciones, respuestas, citas, nuevos seguidores, me gusta y republicaciones: los disparadores de escena y los widgets. Siguen sin leer en la app de Bluesky."
+      }
+    },
+    {
+      "key": "language",
+      "type": "select",
+      "default": "auto",
+      "label": {
+        "en": "Language of the integration",
+        "fr": "Langue de l’intégration",
+        "de": "Sprache der Integration",
+        "es": "Idioma de la integración"
+      },
+      "description": {
+        "en": "Language of the few texts the account writes itself (answer to a link code) and default language of the posts published by the scenes.",
+        "fr": "Langue des quelques textes que le compte écrit lui-même (réponse à un code de liaison) et langue par défaut des posts publiés par les scènes.",
+        "de": "Sprache der wenigen Texte, die das Konto selbst schreibt (Antwort auf einen Verknüpfungscode), und Standardsprache der von Szenen veröffentlichten Posts.",
+        "es": "Idioma de los pocos textos que la cuenta escribe por sí misma (respuesta a un código de vinculación) e idioma por defecto de los posts publicados por las escenas."
+      },
+      "options": [
+        {
+          "value": "auto",
+          "label": {
+            "en": "Automatic (language of the dashboard)",
+            "fr": "Automatique (langue du tableau de bord)",
+            "de": "Automatisch (Sprache des Dashboards)",
+            "es": "Automático (idioma del panel)"
+          }
+        },
+        {
+          "value": "en",
+          "label": {
+            "en": "English",
+            "fr": "Anglais",
+            "de": "Englisch",
+            "es": "Inglés"
+          }
+        },
+        {
+          "value": "fr",
+          "label": {
+            "en": "French",
+            "fr": "Français",
+            "de": "Französisch",
+            "es": "Francés"
+          }
+        },
+        {
+          "value": "de",
+          "label": {
+            "en": "German",
+            "fr": "Allemand",
+            "de": "Deutsch",
+            "es": "Alemán"
+          }
+        },
+        {
+          "value": "es",
+          "label": {
+            "en": "Spanish",
+            "fr": "Espagnol",
+            "de": "Spanisch",
+            "es": "Español"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "key": "test_connection",
+      "timeout_seconds": 30,
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen",
+        "es": "Probar la conexión"
+      },
+      "description": {
+        "en": "Opens the session (also after a refused password), reads the profile, checks the access to direct messages and counts the linked users.",
+        "fr": "Ouvre la session (même après un mot de passe refusé), lit le profil, vérifie l’accès aux messages privés et compte les utilisateurs liés.",
+        "de": "Öffnet die Sitzung (auch nach einem abgelehnten Passwort), liest das Profil, prüft den Zugriff auf Direktnachrichten und zählt die verknüpften Benutzer.",
+        "es": "Abre la sesión (también tras una contraseña rechazada), lee el perfil, comprueba el acceso a los mensajes directos y cuenta los usuarios vinculados."
+      }
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "mention_received",
+      "label": {
+        "en": "Mentioned on Bluesky",
+        "fr": "Mentionné sur Bluesky",
+        "de": "Auf Bluesky erwähnt",
+        "es": "Mencionado en Bluesky"
+      },
+      "description": {
+        "en": "Someone mentioned the account of the integration in a post.",
+        "fr": "Quelqu’un a mentionné le compte de l’intégration dans un post.",
+        "de": "Jemand hat das Konto der Integration in einem Post erwähnt.",
+        "es": "Alguien ha mencionado la cuenta de la integración en un post."
+      },
+      "fields": [
+        {
+          "key": "author_handle",
+          "type": "string",
+          "label": {
+            "en": "Handle of the author",
+            "fr": "Pseudo de l’auteur",
+            "de": "Handle des Autors",
+            "es": "Alias del autor"
+          },
+          "description": {
+            "en": "Only this account, without the @ (e.g. alice.bsky.social). Leave empty for anyone.",
+            "fr": "Uniquement ce compte, sans le @ (ex. alice.bsky.social). Laissez vide pour n’importe qui.",
+            "de": "Nur dieses Konto, ohne das @ (z. B. alice.bsky.social). Leer lassen für alle.",
+            "es": "Solo esta cuenta, sin la @ (p. ej. alice.bsky.social). Déjelo vacío para cualquiera."
+          },
+          "placeholder": {
+            "en": "e.g. alice.bsky.social",
+            "fr": "ex. alice.bsky.social",
+            "de": "z. B. alice.bsky.social",
+            "es": "p. ej. alice.bsky.social"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "author_handle",
+          "type": "string",
+          "label": {
+            "en": "Handle of the author",
+            "fr": "Pseudo de l’auteur",
+            "de": "Handle des Autors",
+            "es": "Alias del autor"
+          }
+        },
+        {
+          "key": "author_name",
+          "type": "string",
+          "label": {
+            "en": "Name of the author",
+            "fr": "Nom de l’auteur",
+            "de": "Name des Autors",
+            "es": "Nombre del autor"
+          }
+        },
+        {
+          "key": "author_did",
+          "type": "string",
+          "label": {
+            "en": "DID of the author",
+            "fr": "DID de l’auteur",
+            "de": "DID des Autors",
+            "es": "DID del autor"
+          }
+        },
+        {
+          "key": "text",
+          "type": "string",
+          "label": {
+            "en": "Text of the post",
+            "fr": "Texte du post",
+            "de": "Text des Posts",
+            "es": "Texto del post"
+          }
+        },
+        {
+          "key": "post_uri",
+          "type": "string",
+          "label": {
+            "en": "AT URI of the post",
+            "fr": "URI AT du post",
+            "de": "AT-URI des Posts",
+            "es": "URI AT del post"
+          }
+        },
+        {
+          "key": "post_url",
+          "type": "string",
+          "label": {
+            "en": "Link to the post",
+            "fr": "Lien vers le post",
+            "de": "Link zum Post",
+            "es": "Enlace al post"
+          }
+        }
+      ]
+    },
+    {
+      "key": "reply_received",
+      "label": {
+        "en": "Bluesky reply received",
+        "fr": "Réponse Bluesky reçue",
+        "de": "Bluesky-Antwort erhalten",
+        "es": "Respuesta de Bluesky recibida"
+      },
+      "description": {
+        "en": "Someone replied to a post of the account of the integration.",
+        "fr": "Quelqu’un a répondu à un post du compte de l’intégration.",
+        "de": "Jemand hat auf einen Post des Kontos der Integration geantwortet.",
+        "es": "Alguien ha respondido a un post de la cuenta de la integración."
+      },
+      "fields": [
+        {
+          "key": "author_handle",
+          "type": "string",
+          "label": {
+            "en": "Handle of the author",
+            "fr": "Pseudo de l’auteur",
+            "de": "Handle des Autors",
+            "es": "Alias del autor"
+          },
+          "description": {
+            "en": "Only this account, without the @ (e.g. alice.bsky.social). Leave empty for anyone.",
+            "fr": "Uniquement ce compte, sans le @ (ex. alice.bsky.social). Laissez vide pour n’importe qui.",
+            "de": "Nur dieses Konto, ohne das @ (z. B. alice.bsky.social). Leer lassen für alle.",
+            "es": "Solo esta cuenta, sin la @ (p. ej. alice.bsky.social). Déjelo vacío para cualquiera."
+          },
+          "placeholder": {
+            "en": "e.g. alice.bsky.social",
+            "fr": "ex. alice.bsky.social",
+            "de": "z. B. alice.bsky.social",
+            "es": "p. ej. alice.bsky.social"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "author_handle",
+          "type": "string",
+          "label": {
+            "en": "Handle of the author",
+            "fr": "Pseudo de l’auteur",
+            "de": "Handle des Autors",
+            "es": "Alias del autor"
+          }
+        },
+        {
+          "key": "author_name",
+          "type": "string",
+          "label": {
+            "en": "Name of the author",
+            "fr": "Nom de l’auteur",
+            "de": "Name des Autors",
+            "es": "Nombre del autor"
+          }
+        },
+        {
+          "key": "author_did",
+          "type": "string",
+          "label": {
+            "en": "DID of the author",
+            "fr": "DID de l’auteur",
+            "de": "DID des Autors",
+            "es": "DID del autor"
+          }
+        },
+        {
+          "key": "text",
+          "type": "string",
+          "label": {
+            "en": "Text of the post",
+            "fr": "Texte du post",
+            "de": "Text des Posts",
+            "es": "Texto del post"
+          }
+        },
+        {
+          "key": "post_uri",
+          "type": "string",
+          "label": {
+            "en": "AT URI of the post",
+            "fr": "URI AT du post",
+            "de": "AT-URI des Posts",
+            "es": "URI AT del post"
+          }
+        },
+        {
+          "key": "post_url",
+          "type": "string",
+          "label": {
+            "en": "Link to the post",
+            "fr": "Lien vers le post",
+            "de": "Link zum Post",
+            "es": "Enlace al post"
+          }
+        },
+        {
+          "key": "subject_uri",
+          "type": "string",
+          "label": {
+            "en": "AT URI of the post of the account",
+            "fr": "URI AT du post du compte",
+            "de": "AT-URI des Posts des Kontos",
+            "es": "URI AT del post de la cuenta"
+          }
+        },
+        {
+          "key": "subject_url",
+          "type": "string",
+          "label": {
+            "en": "Link to the post of the account",
+            "fr": "Lien vers le post du compte",
+            "de": "Link zum Post des Kontos",
+            "es": "Enlace al post de la cuenta"
+          }
+        }
+      ]
+    },
+    {
+      "key": "quote_received",
+      "label": {
+        "en": "Bluesky post quoted",
+        "fr": "Post Bluesky cité",
+        "de": "Bluesky-Post zitiert",
+        "es": "Post de Bluesky citado"
+      },
+      "description": {
+        "en": "Someone quoted a post of the account of the integration.",
+        "fr": "Quelqu’un a cité un post du compte de l’intégration.",
+        "de": "Jemand hat einen Post des Kontos der Integration zitiert.",
+        "es": "Alguien ha citado un post de la cuenta de la integración."
+      },
+      "fields": [
+        {
+          "key": "author_handle",
+          "type": "string",
+          "label": {
+            "en": "Handle of the author",
+            "fr": "Pseudo de l’auteur",
+            "de": "Handle des Autors",
+            "es": "Alias del autor"
+          },
+          "description": {
+            "en": "Only this account, without the @ (e.g. alice.bsky.social). Leave empty for anyone.",
+            "fr": "Uniquement ce compte, sans le @ (ex. alice.bsky.social). Laissez vide pour n’importe qui.",
+            "de": "Nur dieses Konto, ohne das @ (z. B. alice.bsky.social). Leer lassen für alle.",
+            "es": "Solo esta cuenta, sin la @ (p. ej. alice.bsky.social). Déjelo vacío para cualquiera."
+          },
+          "placeholder": {
+            "en": "e.g. alice.bsky.social",
+            "fr": "ex. alice.bsky.social",
+            "de": "z. B. alice.bsky.social",
+            "es": "p. ej. alice.bsky.social"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "author_handle",
+          "type": "string",
+          "label": {
+            "en": "Handle of the author",
+            "fr": "Pseudo de l’auteur",
+            "de": "Handle des Autors",
+            "es": "Alias del autor"
+          }
+        },
+        {
+          "key": "author_name",
+          "type": "string",
+          "label": {
+            "en": "Name of the author",
+            "fr": "Nom de l’auteur",
+            "de": "Name des Autors",
+            "es": "Nombre del autor"
+          }
+        },
+        {
+          "key": "author_did",
+          "type": "string",
+          "label": {
+            "en": "DID of the author",
+            "fr": "DID de l’auteur",
+            "de": "DID des Autors",
+            "es": "DID del autor"
+          }
+        },
+        {
+          "key": "text",
+          "type": "string",
+          "label": {
+            "en": "Text of the post",
+            "fr": "Texte du post",
+            "de": "Text des Posts",
+            "es": "Texto del post"
+          }
+        },
+        {
+          "key": "post_uri",
+          "type": "string",
+          "label": {
+            "en": "AT URI of the post",
+            "fr": "URI AT du post",
+            "de": "AT-URI des Posts",
+            "es": "URI AT del post"
+          }
+        },
+        {
+          "key": "post_url",
+          "type": "string",
+          "label": {
+            "en": "Link to the post",
+            "fr": "Lien vers le post",
+            "de": "Link zum Post",
+            "es": "Enlace al post"
+          }
+        },
+        {
+          "key": "subject_uri",
+          "type": "string",
+          "label": {
+            "en": "AT URI of the post of the account",
+            "fr": "URI AT du post du compte",
+            "de": "AT-URI des Posts des Kontos",
+            "es": "URI AT del post de la cuenta"
+          }
+        },
+        {
+          "key": "subject_url",
+          "type": "string",
+          "label": {
+            "en": "Link to the post of the account",
+            "fr": "Lien vers le post du compte",
+            "de": "Link zum Post des Kontos",
+            "es": "Enlace al post de la cuenta"
+          }
+        }
+      ]
+    },
+    {
+      "key": "new_follower",
+      "label": {
+        "en": "New Bluesky follower",
+        "fr": "Nouvel abonné Bluesky",
+        "de": "Neuer Bluesky-Follower",
+        "es": "Nuevo seguidor de Bluesky"
+      },
+      "description": {
+        "en": "Someone followed the account of the integration.",
+        "fr": "Quelqu’un s’est abonné au compte de l’intégration.",
+        "de": "Jemand folgt jetzt dem Konto der Integration.",
+        "es": "Alguien ha empezado a seguir la cuenta de la integración."
+      },
+      "fields": [
+        {
+          "key": "author_handle",
+          "type": "string",
+          "label": {
+            "en": "Handle of the author",
+            "fr": "Pseudo de l’auteur",
+            "de": "Handle des Autors",
+            "es": "Alias del autor"
+          },
+          "description": {
+            "en": "Only this account, without the @ (e.g. alice.bsky.social). Leave empty for anyone.",
+            "fr": "Uniquement ce compte, sans le @ (ex. alice.bsky.social). Laissez vide pour n’importe qui.",
+            "de": "Nur dieses Konto, ohne das @ (z. B. alice.bsky.social). Leer lassen für alle.",
+            "es": "Solo esta cuenta, sin la @ (p. ej. alice.bsky.social). Déjelo vacío para cualquiera."
+          },
+          "placeholder": {
+            "en": "e.g. alice.bsky.social",
+            "fr": "ex. alice.bsky.social",
+            "de": "z. B. alice.bsky.social",
+            "es": "p. ej. alice.bsky.social"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "author_handle",
+          "type": "string",
+          "label": {
+            "en": "Handle of the author",
+            "fr": "Pseudo de l’auteur",
+            "de": "Handle des Autors",
+            "es": "Alias del autor"
+          }
+        },
+        {
+          "key": "author_name",
+          "type": "string",
+          "label": {
+            "en": "Name of the author",
+            "fr": "Nom de l’auteur",
+            "de": "Name des Autors",
+            "es": "Nombre del autor"
+          }
+        },
+        {
+          "key": "author_did",
+          "type": "string",
+          "label": {
+            "en": "DID of the author",
+            "fr": "DID de l’auteur",
+            "de": "DID des Autors",
+            "es": "DID del autor"
+          }
+        },
+        {
+          "key": "profile_url",
+          "type": "string",
+          "label": {
+            "en": "Link to the profile",
+            "fr": "Lien vers le profil",
+            "de": "Link zum Profil",
+            "es": "Enlace al perfil"
+          }
+        }
+      ]
+    },
+    {
+      "key": "like_received",
+      "label": {
+        "en": "Bluesky like received",
+        "fr": "J’aime Bluesky reçu",
+        "de": "Bluesky-Like erhalten",
+        "es": "Me gusta de Bluesky recibido"
+      },
+      "description": {
+        "en": "Someone liked a post of the account of the integration.",
+        "fr": "Quelqu’un a aimé un post du compte de l’intégration.",
+        "de": "Jemandem gefällt ein Post des Kontos der Integration.",
+        "es": "A alguien le ha gustado un post de la cuenta de la integración."
+      },
+      "fields": [
+        {
+          "key": "author_handle",
+          "type": "string",
+          "label": {
+            "en": "Handle of the author",
+            "fr": "Pseudo de l’auteur",
+            "de": "Handle des Autors",
+            "es": "Alias del autor"
+          },
+          "description": {
+            "en": "Only this account, without the @ (e.g. alice.bsky.social). Leave empty for anyone.",
+            "fr": "Uniquement ce compte, sans le @ (ex. alice.bsky.social). Laissez vide pour n’importe qui.",
+            "de": "Nur dieses Konto, ohne das @ (z. B. alice.bsky.social). Leer lassen für alle.",
+            "es": "Solo esta cuenta, sin la @ (p. ej. alice.bsky.social). Déjelo vacío para cualquiera."
+          },
+          "placeholder": {
+            "en": "e.g. alice.bsky.social",
+            "fr": "ex. alice.bsky.social",
+            "de": "z. B. alice.bsky.social",
+            "es": "p. ej. alice.bsky.social"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "author_handle",
+          "type": "string",
+          "label": {
+            "en": "Handle of the author",
+            "fr": "Pseudo de l’auteur",
+            "de": "Handle des Autors",
+            "es": "Alias del autor"
+          }
+        },
+        {
+          "key": "author_name",
+          "type": "string",
+          "label": {
+            "en": "Name of the author",
+            "fr": "Nom de l’auteur",
+            "de": "Name des Autors",
+            "es": "Nombre del autor"
+          }
+        },
+        {
+          "key": "author_did",
+          "type": "string",
+          "label": {
+            "en": "DID of the author",
+            "fr": "DID de l’auteur",
+            "de": "DID des Autors",
+            "es": "DID del autor"
+          }
+        },
+        {
+          "key": "subject_uri",
+          "type": "string",
+          "label": {
+            "en": "AT URI of the post of the account",
+            "fr": "URI AT du post du compte",
+            "de": "AT-URI des Posts des Kontos",
+            "es": "URI AT del post de la cuenta"
+          }
+        },
+        {
+          "key": "subject_url",
+          "type": "string",
+          "label": {
+            "en": "Link to the post of the account",
+            "fr": "Lien vers le post du compte",
+            "de": "Link zum Post des Kontos",
+            "es": "Enlace al post de la cuenta"
+          }
+        }
+      ]
+    },
+    {
+      "key": "repost_received",
+      "label": {
+        "en": "Bluesky repost received",
+        "fr": "Republication Bluesky reçue",
+        "de": "Bluesky-Repost erhalten",
+        "es": "Republicación de Bluesky recibida"
+      },
+      "description": {
+        "en": "Someone reposted a post of the account of the integration.",
+        "fr": "Quelqu’un a republié un post du compte de l’intégration.",
+        "de": "Jemand hat einen Post des Kontos der Integration geteilt.",
+        "es": "Alguien ha republicado un post de la cuenta de la integración."
+      },
+      "fields": [
+        {
+          "key": "author_handle",
+          "type": "string",
+          "label": {
+            "en": "Handle of the author",
+            "fr": "Pseudo de l’auteur",
+            "de": "Handle des Autors",
+            "es": "Alias del autor"
+          },
+          "description": {
+            "en": "Only this account, without the @ (e.g. alice.bsky.social). Leave empty for anyone.",
+            "fr": "Uniquement ce compte, sans le @ (ex. alice.bsky.social). Laissez vide pour n’importe qui.",
+            "de": "Nur dieses Konto, ohne das @ (z. B. alice.bsky.social). Leer lassen für alle.",
+            "es": "Solo esta cuenta, sin la @ (p. ej. alice.bsky.social). Déjelo vacío para cualquiera."
+          },
+          "placeholder": {
+            "en": "e.g. alice.bsky.social",
+            "fr": "ex. alice.bsky.social",
+            "de": "z. B. alice.bsky.social",
+            "es": "p. ej. alice.bsky.social"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "author_handle",
+          "type": "string",
+          "label": {
+            "en": "Handle of the author",
+            "fr": "Pseudo de l’auteur",
+            "de": "Handle des Autors",
+            "es": "Alias del autor"
+          }
+        },
+        {
+          "key": "author_name",
+          "type": "string",
+          "label": {
+            "en": "Name of the author",
+            "fr": "Nom de l’auteur",
+            "de": "Name des Autors",
+            "es": "Nombre del autor"
+          }
+        },
+        {
+          "key": "author_did",
+          "type": "string",
+          "label": {
+            "en": "DID of the author",
+            "fr": "DID de l’auteur",
+            "de": "DID des Autors",
+            "es": "DID del autor"
+          }
+        },
+        {
+          "key": "subject_uri",
+          "type": "string",
+          "label": {
+            "en": "AT URI of the post of the account",
+            "fr": "URI AT du post du compte",
+            "de": "AT-URI des Posts des Kontos",
+            "es": "URI AT del post de la cuenta"
+          }
+        },
+        {
+          "key": "subject_url",
+          "type": "string",
+          "label": {
+            "en": "Link to the post of the account",
+            "fr": "Lien vers le post du compte",
+            "de": "Link zum Post des Kontos",
+            "es": "Enlace al post de la cuenta"
+          }
+        }
+      ]
+    },
+    {
+      "key": "dm_received",
+      "label": {
+        "en": "Bluesky message received",
+        "fr": "Message Bluesky reçu",
+        "de": "Bluesky-Nachricht empfangen",
+        "es": "Mensaje de Bluesky recibido"
+      },
+      "description": {
+        "en": "A linked user sent a direct message to the account of the integration. It also goes to Gladys as usual.",
+        "fr": "Un utilisateur lié a envoyé un message privé au compte de l’intégration. Il va aussi à Gladys comme d’habitude.",
+        "de": "Ein verknüpfter Benutzer hat dem Konto der Integration eine Direktnachricht gesendet. Sie geht wie gewohnt auch an Gladys.",
+        "es": "Un usuario vinculado ha enviado un mensaje directo a la cuenta de la integración. También llega a Gladys como siempre."
+      },
+      "fields": [
+        {
+          "key": "gladys_user",
+          "type": "string",
+          "label": {
+            "en": "Gladys user (selector)",
+            "fr": "Utilisateur Gladys (sélecteur)",
+            "de": "Gladys-Benutzer (Selektor)",
+            "es": "Usuario de Gladys (selector)"
+          },
+          "description": {
+            "en": "The selector of the user in Gladys, e.g. john. Leave empty for any.",
+            "fr": "Le sélecteur de l’utilisateur dans Gladys, ex. john. Laissez vide pour n’importe lequel.",
+            "de": "Der Selektor des Benutzers in Gladys, z. B. john. Leer lassen für beliebige.",
+            "es": "El selector del usuario en Gladys, p. ej. john. Déjelo vacío para cualquiera."
+          }
+        },
+        {
+          "key": "text",
+          "type": "string",
+          "label": {
+            "en": "Exact text",
+            "fr": "Texte exact",
+            "de": "Genauer Text",
+            "es": "Texto exacto"
+          },
+          "description": {
+            "en": "Only a message of exactly this text (same case). Leave empty for any message.",
+            "fr": "Uniquement un message de ce texte exact (mêmes majuscules). Laissez vide pour tout message.",
+            "de": "Nur eine Nachricht mit genau diesem Text (gleiche Groß-/Kleinschreibung). Leer lassen für jede Nachricht.",
+            "es": "Solo un mensaje con este texto exacto (mismas mayúsculas). Déjelo vacío para cualquier mensaje."
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "text",
+          "type": "string",
+          "label": {
+            "en": "Text of the message",
+            "fr": "Texte du message",
+            "de": "Text der Nachricht",
+            "es": "Texto del mensaje"
+          }
+        },
+        {
+          "key": "sender_handle",
+          "type": "string",
+          "label": {
+            "en": "Handle of the sender",
+            "fr": "Pseudo de l’expéditeur",
+            "de": "Handle des Absenders",
+            "es": "Alias del remitente"
+          }
+        },
+        {
+          "key": "sender_name",
+          "type": "string",
+          "label": {
+            "en": "Name of the sender",
+            "fr": "Nom de l’expéditeur",
+            "de": "Name des Absenders",
+            "es": "Nombre del remitente"
+          }
+        },
+        {
+          "key": "sender_did",
+          "type": "string",
+          "label": {
+            "en": "DID of the sender",
+            "fr": "DID de l’expéditeur",
+            "de": "DID des Absenders",
+            "es": "DID del remitente"
+          }
+        },
+        {
+          "key": "gladys_user",
+          "type": "string",
+          "label": {
+            "en": "Gladys user (selector)",
+            "fr": "Utilisateur Gladys (sélecteur)",
+            "de": "Gladys-Benutzer (Selektor)",
+            "es": "Usuario de Gladys (selector)"
+          }
+        },
+        {
+          "key": "first_name",
+          "type": "string",
+          "label": {
+            "en": "First name in Gladys",
+            "fr": "Prénom dans Gladys",
+            "de": "Vorname in Gladys",
+            "es": "Nombre en Gladys"
+          }
+        },
+        {
+          "key": "convo_id",
+          "type": "string",
+          "label": {
+            "en": "Conversation ID",
+            "fr": "Identifiant de la conversation",
+            "de": "ID der Unterhaltung",
+            "es": "Identificador de la conversación"
+          }
+        },
+        {
+          "key": "message_id",
+          "type": "string",
+          "label": {
+            "en": "Message ID",
+            "fr": "Identifiant du message",
+            "de": "ID der Nachricht",
+            "es": "Identificador del mensaje"
+          }
+        }
+      ]
+    },
+    {
+      "key": "dm_received_unlinked",
+      "label": {
+        "en": "Message from an unlinked account",
+        "fr": "Message d’un compte non lié",
+        "de": "Nachricht eines fremden Kontos",
+        "es": "Mensaje de cuenta no vinculada"
+      },
+      "description": {
+        "en": "An account that is not linked to Gladys sent a direct message. It never reaches Gladys and gets no answer: use it to be warned, never to drive the house.",
+        "fr": "Un compte non lié à Gladys a envoyé un message privé. Il n’atteint jamais Gladys et ne reçoit aucune réponse : servez-vous-en pour être prévenu, jamais pour piloter la maison.",
+        "de": "Ein nicht mit Gladys verknüpftes Konto hat eine Direktnachricht gesendet. Sie erreicht Gladys nie und erhält keine Antwort: Nutze sie, um gewarnt zu werden, nie um das Haus zu steuern.",
+        "es": "Una cuenta no vinculada a Gladys ha enviado un mensaje directo. Nunca llega a Gladys ni recibe respuesta: úselo para recibir avisos, nunca para controlar la casa."
+      },
+      "fields": [
+        {
+          "key": "sender_handle",
+          "type": "string",
+          "label": {
+            "en": "Handle of the sender",
+            "fr": "Pseudo de l’expéditeur",
+            "de": "Handle des Absenders",
+            "es": "Alias del remitente"
+          },
+          "description": {
+            "en": "Only this account, without the @. Leave empty for any.",
+            "fr": "Uniquement ce compte, sans le @. Laissez vide pour n’importe lequel.",
+            "de": "Nur dieses Konto, ohne das @. Leer lassen für beliebige.",
+            "es": "Solo esta cuenta, sin la @. Déjelo vacío para cualquiera."
+          },
+          "placeholder": {
+            "en": "e.g. alice.bsky.social",
+            "fr": "ex. alice.bsky.social",
+            "de": "z. B. alice.bsky.social",
+            "es": "p. ej. alice.bsky.social"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "text",
+          "type": "string",
+          "label": {
+            "en": "Text of the message",
+            "fr": "Texte du message",
+            "de": "Text der Nachricht",
+            "es": "Texto del mensaje"
+          }
+        },
+        {
+          "key": "sender_handle",
+          "type": "string",
+          "label": {
+            "en": "Handle of the sender",
+            "fr": "Pseudo de l’expéditeur",
+            "de": "Handle des Absenders",
+            "es": "Alias del remitente"
+          }
+        },
+        {
+          "key": "sender_name",
+          "type": "string",
+          "label": {
+            "en": "Name of the sender",
+            "fr": "Nom de l’expéditeur",
+            "de": "Name des Absenders",
+            "es": "Nombre del remitente"
+          }
+        },
+        {
+          "key": "sender_did",
+          "type": "string",
+          "label": {
+            "en": "DID of the sender",
+            "fr": "DID de l’expéditeur",
+            "de": "DID des Absenders",
+            "es": "DID del remitente"
+          }
+        },
+        {
+          "key": "convo_id",
+          "type": "string",
+          "label": {
+            "en": "Conversation ID",
+            "fr": "Identifiant de la conversation",
+            "de": "ID der Unterhaltung",
+            "es": "Identificador de la conversación"
+          }
+        },
+        {
+          "key": "message_id",
+          "type": "string",
+          "label": {
+            "en": "Message ID",
+            "fr": "Identifiant du message",
+            "de": "ID der Nachricht",
+            "es": "Identificador del mensaje"
+          }
+        }
+      ]
+    },
+    {
+      "key": "message_not_sent",
+      "label": {
+        "en": "Bluesky message not sent",
+        "fr": "Message Bluesky non envoyé",
+        "de": "Bluesky-Nachricht nicht gesendet",
+        "es": "Mensaje de Bluesky no enviado"
+      },
+      "description": {
+        "en": "A message of Gladys to a linked user could not be delivered. Fires on the first failure for a user, then again only after a message to them went through: a scene warning you on Bluesky cannot loop.",
+        "fr": "Un message de Gladys à un utilisateur lié n’a pas pu être remis. Se déclenche au premier échec pour un utilisateur, puis seulement après qu’un message vers lui est de nouveau passé : une scène qui vous prévient sur Bluesky ne peut pas boucler.",
+        "de": "Eine Nachricht von Gladys an einen verknüpften Benutzer konnte nicht zugestellt werden. Löst beim ersten Fehler für einen Benutzer aus, danach erst wieder, nachdem eine Nachricht an ihn durchgegangen ist: Eine Szene, die dich auf Bluesky warnt, kann keine Schleife bilden.",
+        "es": "Un mensaje de Gladys a un usuario vinculado no pudo entregarse. Se activa con el primer fallo para un usuario y solo de nuevo después de que un mensaje hacia él haya pasado: una escena que le avisa en Bluesky no puede entrar en bucle."
+      },
+      "fields": [
+        {
+          "key": "reason",
+          "type": "select",
+          "label": {
+            "en": "Reason",
+            "fr": "Cause",
+            "de": "Ursache",
+            "es": "Causa"
+          },
+          "description": {
+            "en": "Leave empty for any reason.",
+            "fr": "Laissez vide pour n’importe quelle cause.",
+            "de": "Leer lassen für jede Ursache.",
+            "es": "Déjelo vacío para cualquier causa."
+          },
+          "options": [
+            {
+              "value": "auth",
+              "label": {
+                "en": "Session refused",
+                "fr": "Session refusée",
+                "de": "Sitzung abgelehnt",
+                "es": "Sesión rechazada"
+              }
+            },
+            {
+              "value": "dm_scope",
+              "label": {
+                "en": "App password without direct messages",
+                "fr": "Mot de passe sans messages privés",
+                "de": "App-Passwort ohne Direktnachrichten",
+                "es": "Contraseña sin mensajes directos"
+              }
+            },
+            {
+              "value": "recipient",
+              "label": {
+                "en": "The user does not accept the messages",
+                "fr": "L’utilisateur n’accepte pas les messages",
+                "de": "Benutzer nimmt keine Nachrichten an",
+                "es": "El usuario no acepta los mensajes"
+              }
+            },
+            {
+              "value": "rate_limited",
+              "label": {
+                "en": "Too many requests",
+                "fr": "Trop de requêtes",
+                "de": "Zu viele Anfragen",
+                "es": "Demasiadas solicitudes"
+              }
+            },
+            {
+              "value": "network",
+              "label": {
+                "en": "Bluesky unreachable",
+                "fr": "Bluesky injoignable",
+                "de": "Bluesky nicht erreichbar",
+                "es": "Bluesky inalcanzable"
+              }
+            },
+            {
+              "value": "other",
+              "label": {
+                "en": "Other error",
+                "fr": "Autre erreur",
+                "de": "Anderer Fehler",
+                "es": "Otro error"
+              }
+            }
+          ]
+        },
+        {
+          "key": "gladys_user",
+          "type": "string",
+          "label": {
+            "en": "Gladys user (selector)",
+            "fr": "Utilisateur Gladys (sélecteur)",
+            "de": "Gladys-Benutzer (Selektor)",
+            "es": "Usuario de Gladys (selector)"
+          },
+          "description": {
+            "en": "The selector of the user in Gladys, e.g. john. Leave empty for any.",
+            "fr": "Le sélecteur de l’utilisateur dans Gladys, ex. john. Laissez vide pour n’importe lequel.",
+            "de": "Der Selektor des Benutzers in Gladys, z. B. john. Leer lassen für beliebige.",
+            "es": "El selector del usuario en Gladys, p. ej. john. Déjelo vacío para cualquiera."
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "target",
+          "type": "string",
+          "label": {
+            "en": "DID of the user",
+            "fr": "DID de l’utilisateur",
+            "de": "DID des Benutzers",
+            "es": "DID del usuario"
+          }
+        },
+        {
+          "key": "handle",
+          "type": "string",
+          "label": {
+            "en": "Handle of the user",
+            "fr": "Pseudo de l’utilisateur",
+            "de": "Handle des Benutzers",
+            "es": "Alias del usuario"
+          }
+        },
+        {
+          "key": "gladys_user",
+          "type": "string",
+          "label": {
+            "en": "Gladys user (selector)",
+            "fr": "Utilisateur Gladys (sélecteur)",
+            "de": "Gladys-Benutzer (Selektor)",
+            "es": "Usuario de Gladys (selector)"
+          }
+        },
+        {
+          "key": "first_name",
+          "type": "string",
+          "label": {
+            "en": "First name in Gladys",
+            "fr": "Prénom dans Gladys",
+            "de": "Vorname in Gladys",
+            "es": "Nombre en Gladys"
+          }
+        },
+        {
+          "key": "reason",
+          "type": "string",
+          "label": {
+            "en": "Reason",
+            "fr": "Cause",
+            "de": "Ursache",
+            "es": "Causa"
+          }
+        },
+        {
+          "key": "error",
+          "type": "string",
+          "label": {
+            "en": "Bluesky error code",
+            "fr": "Code d’erreur Bluesky",
+            "de": "Bluesky-Fehlercode",
+            "es": "Código de error de Bluesky"
+          }
+        }
+      ]
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "publish_post",
+      "timeout_seconds": 60,
+      "label": {
+        "en": "Publish a Bluesky post",
+        "fr": "Publier un post Bluesky",
+        "de": "Bluesky-Post veröffentlichen",
+        "es": "Publicar un post de Bluesky"
+      },
+      "description": {
+        "en": "Public post of the account of the integration. Links, #hashtags and @mentions become clickable. Longer than 300 characters: shortened with …. The same post less than a minute later is published once; 30 posts an hour at most.",
+        "fr": "Post public du compte de l’intégration. Liens, #hashtags et @mentions deviennent cliquables. Plus de 300 caractères : raccourci avec …. Le même post moins d’une minute après n’est publié qu’une fois ; 30 posts par heure au plus.",
+        "de": "Öffentlicher Post des Kontos der Integration. Links, #Hashtags und @Erwähnungen werden anklickbar. Länger als 300 Zeichen: mit … gekürzt. Derselbe Post innerhalb einer Minute wird einmal veröffentlicht; höchstens 30 Posts pro Stunde.",
+        "es": "Post público de la cuenta de la integración. Enlaces, #hashtags y @menciones se vuelven clicables. Más de 300 caracteres: se acorta con …. El mismo post en menos de un minuto se publica una vez; 30 posts por hora como máximo."
+      },
+      "fields": [
+        {
+          "key": "text",
+          "type": "string",
+          "required": true,
+          "label": {
+            "en": "Text",
+            "fr": "Texte",
+            "de": "Text",
+            "es": "Texto"
+          },
+          "description": {
+            "en": "300 characters at most. Scene variables ({{…}}) work in every field.",
+            "fr": "300 caractères au plus. Les variables de scène ({{…}}) fonctionnent dans chaque champ.",
+            "de": "Höchstens 300 Zeichen. Szenenvariablen ({{…}}) funktionieren in jedem Feld.",
+            "es": "300 caracteres como máximo. Las variables de escena ({{…}}) funcionan en todos los campos."
+          },
+          "placeholder": {
+            "en": "The solar panels produced 12 kWh today #solar",
+            "fr": "Les panneaux solaires ont produit 12 kWh aujourd’hui #solaire",
+            "de": "Die Solaranlage hat heute 12 kWh erzeugt #solar",
+            "es": "Los paneles solares produjeron 12 kWh hoy #solar"
+          }
+        },
+        {
+          "key": "language",
+          "type": "string",
+          "label": {
+            "en": "Language of the post",
+            "fr": "Langue du post",
+            "de": "Sprache des Posts",
+            "es": "Idioma del post"
+          },
+          "description": {
+            "en": "A language code (fr, en, de, pt-BR…). Empty: the language of the integration.",
+            "fr": "Un code de langue (fr, en, de, pt-BR…). Vide : la langue de l’intégration.",
+            "de": "Ein Sprachcode (fr, en, de, pt-BR…). Leer: die Sprache der Integration.",
+            "es": "Un código de idioma (fr, en, de, pt-BR…). Vacío: el idioma de la integración."
+          },
+          "placeholder": {
+            "en": "e.g. en",
+            "fr": "ex. fr",
+            "de": "z. B. de",
+            "es": "p. ej. es"
+          }
+        },
+        {
+          "key": "reply_to",
+          "type": "string",
+          "label": {
+            "en": "Reply to",
+            "fr": "Répondre à",
+            "de": "Antworten auf",
+            "es": "Responder a"
+          },
+          "description": {
+            "en": "Optional: the link (https://bsky.app/profile/…/post/…) or the at:// URI of a post, e.g. {{triggerEvent.data.post_uri}}.",
+            "fr": "Facultatif : le lien (https://bsky.app/profile/…/post/…) ou l’URI at:// d’un post, ex. {{triggerEvent.data.post_uri}}.",
+            "de": "Optional: der Link (https://bsky.app/profile/…/post/…) oder die at://-URI eines Posts, z. B. {{triggerEvent.data.post_uri}}.",
+            "es": "Opcional: el enlace (https://bsky.app/profile/…/post/…) o la URI at:// de un post, p. ej. {{triggerEvent.data.post_uri}}."
+          }
+        },
+        {
+          "key": "image_url",
+          "type": "string",
+          "label": {
+            "en": "Image URL",
+            "fr": "URL d’une image",
+            "de": "Bild-URL",
+            "es": "URL de una imagen"
+          },
+          "description": {
+            "en": "Optional: an http(s) address of a JPEG, PNG, WebP or GIF image of 2 MB at most. It becomes public: never a camera of the house.",
+            "fr": "Facultatif : une adresse http(s) d’une image JPEG, PNG, WebP ou GIF de 2 Mo au plus. Elle devient publique : jamais une caméra de la maison.",
+            "de": "Optional: eine http(s)-Adresse eines JPEG-, PNG-, WebP- oder GIF-Bildes von höchstens 2 MB. Es wird öffentlich: nie eine Kamera des Hauses.",
+            "es": "Opcional: una dirección http(s) de una imagen JPEG, PNG, WebP o GIF de 2 MB como máximo. Se vuelve pública: nunca una cámara de la casa."
+          }
+        },
+        {
+          "key": "image_alt",
+          "type": "string",
+          "label": {
+            "en": "Image description",
+            "fr": "Description de l’image",
+            "de": "Bildbeschreibung",
+            "es": "Descripción de la imagen"
+          },
+          "description": {
+            "en": "The alternative text read to people who cannot see the image.",
+            "fr": "Le texte alternatif lu aux personnes qui ne voient pas l’image.",
+            "de": "Der Alternativtext für Menschen, die das Bild nicht sehen.",
+            "es": "El texto alternativo para las personas que no ven la imagen."
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "key": "uri",
+          "type": "string",
+          "label": {
+            "en": "AT URI of the post",
+            "fr": "URI AT du post",
+            "de": "AT-URI des Posts",
+            "es": "URI AT del post"
+          }
+        },
+        {
+          "key": "url",
+          "type": "string",
+          "label": {
+            "en": "Link to the post",
+            "fr": "Lien vers le post",
+            "de": "Link zum Post",
+            "es": "Enlace al post"
+          }
+        },
+        {
+          "key": "cid",
+          "type": "string",
+          "label": {
+            "en": "CID of the post",
+            "fr": "CID du post",
+            "de": "CID des Posts",
+            "es": "CID del post"
+          }
+        }
+      ]
+    },
+    {
+      "key": "send_dm",
+      "timeout_seconds": 30,
+      "label": {
+        "en": "Send a Bluesky direct message",
+        "fr": "Envoyer un message privé Bluesky",
+        "de": "Bluesky-Direktnachricht senden",
+        "es": "Enviar un mensaje directo de Bluesky"
+      },
+      "description": {
+        "en": "From the account of the integration to any account that accepts its messages, linked or not. The same message to the same account less than a minute later is sent once.",
+        "fr": "Du compte de l’intégration vers tout compte qui accepte ses messages, lié ou non. Le même message au même compte moins d’une minute après n’est envoyé qu’une fois.",
+        "de": "Vom Konto der Integration an jedes Konto, das seine Nachrichten annimmt, verknüpft oder nicht. Dieselbe Nachricht an dasselbe Konto innerhalb einer Minute wird einmal gesendet.",
+        "es": "De la cuenta de la integración a cualquier cuenta que acepte sus mensajes, vinculada o no. El mismo mensaje a la misma cuenta en menos de un minuto se envía una vez."
+      },
+      "fields": [
+        {
+          "key": "recipient",
+          "type": "string",
+          "required": true,
+          "label": {
+            "en": "Recipient",
+            "fr": "Destinataire",
+            "de": "Empfänger",
+            "es": "Destinatario"
+          },
+          "description": {
+            "en": "A handle (alice.bsky.social), a DID (did:plc:…) or a profile link, e.g. {{triggerEvent.data.author_handle}}.",
+            "fr": "Un pseudo (alice.bsky.social), un DID (did:plc:…) ou un lien de profil, ex. {{triggerEvent.data.author_handle}}.",
+            "de": "Ein Handle (alice.bsky.social), eine DID (did:plc:…) oder ein Profillink, z. B. {{triggerEvent.data.author_handle}}.",
+            "es": "Un alias (alice.bsky.social), un DID (did:plc:…) o un enlace de perfil, p. ej. {{triggerEvent.data.author_handle}}."
+          },
+          "placeholder": {
+            "en": "e.g. alice.bsky.social",
+            "fr": "ex. alice.bsky.social",
+            "de": "z. B. alice.bsky.social",
+            "es": "p. ej. alice.bsky.social"
+          }
+        },
+        {
+          "key": "text",
+          "type": "string",
+          "required": true,
+          "label": {
+            "en": "Message",
+            "fr": "Message",
+            "de": "Nachricht",
+            "es": "Mensaje"
+          },
+          "description": {
+            "en": "Cut in several messages beyond 1,000 characters.",
+            "fr": "Découpé en plusieurs messages au-delà de 1 000 caractères.",
+            "de": "Über 1.000 Zeichen in mehrere Nachrichten aufgeteilt.",
+            "es": "Se divide en varios mensajes a partir de 1.000 caracteres."
+          },
+          "placeholder": {
+            "en": "The front door has been open for 5 minutes",
+            "fr": "La porte d’entrée est ouverte depuis 5 minutes",
+            "de": "Die Haustür ist seit 5 Minuten offen",
+            "es": "La puerta de entrada lleva 5 minutos abierta"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "key": "convo_id",
+          "type": "string",
+          "label": {
+            "en": "Conversation ID",
+            "fr": "Identifiant de la conversation",
+            "de": "ID der Unterhaltung",
+            "es": "Identificador de la conversación"
+          }
+        },
+        {
+          "key": "message_id",
+          "type": "string",
+          "label": {
+            "en": "Message ID",
+            "fr": "Identifiant du message",
+            "de": "ID der Nachricht",
+            "es": "Identificador del mensaje"
+          }
+        }
+      ]
+    },
+    {
+      "key": "delete_post",
+      "timeout_seconds": 30,
+      "label": {
+        "en": "Delete a Bluesky post",
+        "fr": "Supprimer un post Bluesky",
+        "de": "Bluesky-Post löschen",
+        "es": "Eliminar un post de Bluesky"
+      },
+      "description": {
+        "en": "Deletes a post of the account of the integration, e.g. the one a scene published earlier (output “Link to the post”).",
+        "fr": "Supprime un post du compte de l’intégration, par exemple celui qu’une scène a publié plus tôt (sortie « Lien vers le post »).",
+        "de": "Löscht einen Post des Kontos der Integration, z. B. den, den eine Szene vorher veröffentlicht hat (Ausgabe „Link zum Post“).",
+        "es": "Elimina un post de la cuenta de la integración, p. ej. el que una escena publicó antes (salida «Enlace al post»)."
+      },
+      "fields": [
+        {
+          "key": "post",
+          "type": "string",
+          "required": true,
+          "label": {
+            "en": "Post",
+            "fr": "Post",
+            "de": "Post",
+            "es": "Post"
+          },
+          "description": {
+            "en": "The link (https://bsky.app/profile/…/post/…) or the at:// URI of the post.",
+            "fr": "Le lien (https://bsky.app/profile/…/post/…) ou l’URI at:// du post.",
+            "de": "Der Link (https://bsky.app/profile/…/post/…) oder die at://-URI des Posts.",
+            "es": "El enlace (https://bsky.app/profile/…/post/…) o la URI at:// del post."
+          }
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "key": "account",
+      "icon": "user",
+      "label": {
+        "en": "Bluesky account",
+        "fr": "Compte Bluesky",
+        "de": "Bluesky-Konto",
+        "es": "Cuenta de Bluesky"
+      },
+      "description": {
+        "en": "Followers, follows, posts, unread notifications and the connection.",
+        "fr": "Abonnés, abonnements, posts, notifications non lues et connexion.",
+        "de": "Follower, Abos, Posts, ungelesene Mitteilungen und Verbindung.",
+        "es": "Seguidores, seguidos, posts, notificaciones sin leer y conexión."
+      },
+      "action_timeout_seconds": 30
+    },
+    {
+      "key": "notifications",
+      "icon": "bell",
+      "label": {
+        "en": "Bluesky notifications",
+        "fr": "Notifications Bluesky",
+        "de": "Bluesky-Mitteilungen",
+        "es": "Notificaciones Bluesky"
+      },
+      "description": {
+        "en": "The last mentions, replies, quotes, followers, likes and reposts.",
+        "fr": "Dernières mentions, réponses, citations, abonnés, j’aime et republications.",
+        "de": "Letzte Erwähnungen, Antworten, Zitate, Follower, Likes und Reposts.",
+        "es": "Últimas menciones, respuestas, citas, seguidores, me gusta y republicaciones."
+      },
+      "settings": [
+        {
+          "key": "include_likes",
+          "type": "boolean",
+          "default": true,
+          "label": {
+            "en": "Show likes and reposts",
+            "fr": "Afficher j’aime et republications",
+            "de": "Likes und Reposts anzeigen",
+            "es": "Mostrar me gusta y republicaciones"
+          },
+          "description": {
+            "en": "Off: only mentions, replies, quotes and new followers.",
+            "fr": "Désactivé : seulement mentions, réponses, citations et nouveaux abonnés.",
+            "de": "Aus: nur Erwähnungen, Antworten, Zitate und neue Follower.",
+            "es": "Desactivado: solo menciones, respuestas, citas y nuevos seguidores."
+          }
+        }
+      ]
+    },
+    {
+      "key": "messages",
+      "icon": "message-circle",
+      "label": {
+        "en": "Bluesky messages",
+        "fr": "Messages Bluesky",
+        "de": "Bluesky-Nachrichten",
+        "es": "Mensajes Bluesky"
+      },
+      "description": {
+        "en": "Direct messages received and sent today, and the last messages.",
+        "fr": "Messages privés reçus et envoyés aujourd’hui, et derniers messages.",
+        "de": "Heute empfangene und gesendete Direktnachrichten, letzte Nachrichten.",
+        "es": "Mensajes directos recibidos y enviados hoy, y últimos mensajes."
+      },
+      "settings": [
+        {
+          "key": "show_text",
+          "type": "boolean",
+          "default": false,
+          "label": {
+            "en": "Show the text of the messages",
+            "fr": "Afficher le texte des messages",
+            "de": "Text der Nachrichten anzeigen",
+            "es": "Mostrar el texto de los mensajes"
+          },
+          "description": {
+            "en": "Off by default: every user of a shared dashboard would read them.",
+            "fr": "Désactivé par défaut : tout utilisateur d’un tableau de bord partagé les lirait.",
+            "de": "Standardmäßig aus: Jeder Benutzer eines geteilten Dashboards würde sie lesen.",
+            "es": "Desactivado por defecto: cualquier usuario de un panel compartido los leería."
+          }
+        }
+      ]
+    }
+  ]
+}

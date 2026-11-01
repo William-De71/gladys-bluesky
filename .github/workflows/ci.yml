@@ -1,0 +1,127 @@
+# -----------------------------------------------------------------------------
+# Continuous integration: every pull request, and the quality gate of the
+# Release workflow (workflow_call) on every push to main. No `push` trigger of
+# its own on main: release.yml runs it there, so a release is never cut from a
+# commit whose checks failed.
+#
+#   1. Prettier, ESLint and the tests, on Node 22 (the oldest version
+#      `engines` accepts) and Node 24 (the one the image ships with);
+#   2. the store admission checks, without the image check (the image of a
+#      version only exists once it is released);
+#   3. the Docker image, built for amd64 and never pushed, then started like
+#      Gladys runs it: a broken Dockerfile or a module that does not load
+#      shows up here rather than in a release.
+# -----------------------------------------------------------------------------
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+
+# Checks only read the code: no write scope for the token.
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    name: Lint & test (Node ${{ matrix.node-version }})
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [22, 24]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node-version }}
+          # Never the runner's cached Node: it can predate a security release.
+          check-latest: true
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check formatting (Prettier)
+        run: npm run format:check
+
+      - name: Lint (ESLint)
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+  store:
+    runs-on: ubuntu-latest
+    name: Store admission checks
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          # Never the runner's cached Node: it can predate a security release.
+          check-latest: true
+
+      - name: Validate the manifest, the cover and the docs
+        run: npx --yes github:GladysAssistant/integration-store . --skip-image-check
+
+  docker:
+    runs-on: ubuntu-latest
+    name: Docker build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      # Same build as build.yml, without pushing, and for amd64 only: emulating
+      # arm64 is slow, and only the release build needs it.
+      - name: Build (no push)
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/amd64
+          push: false
+          load: true
+          tags: gladys-bluesky:ci
+
+      # The image as Gladys runs it (read-only, unprivileged, 256 MB, no
+      # network): every module loads, Intl.Segmenter counts graphemes (full
+      # ICU), facets are UTF-8 byte offsets, a widget is valid, and Bluesky
+      # unreachable is a clean network error.
+      - name: Smoke test of the image
+        run: |
+          set -euo pipefail
+          docker run --rm --read-only --memory 256m --network none --user node \
+            --tmpfs /data:uid=1000,gid=1000 --entrypoint node gladys-bluesky:ci \
+            --input-type=module -e "
+              const { createApp } = await import('/app/src/app.js');
+              const { graphemeLength, detectFacets } = await import('/app/src/richtext.js');
+              const { buildAccountWidget } = await import('/app/src/widgets.js');
+              const { createBlueskyApi } = await import('/app/src/bluesky-api.js');
+              const { validateWidgetContent } = await import('@gladysassistant/integration-sdk');
+              const widget = buildAccountWidget({ connection: 'connected', profile: { handle: 'home.bsky.social', followersCount: 1, followsCount: 2, postsCount: 3 }, unread: 0, counters: { received: 1, sent: 2, posts: 0 }, messages: 'on', notifications: true, linked: 1, language: 'fr' });
+              const [facet] = await detectFacets('Été #maison');
+              const api = createBlueskyApi({ timeoutMs: 3000, logger: { info() {}, warn() {}, debug() {} } });
+              api.configure({ identifier: 'home.bsky.social', appPassword: 'not-a-real-app-password', service: 'https://bsky.social' });
+              let reason = null;
+              try { await api.connect(); } catch (error) { reason = error.reason; }
+              if (typeof createApp !== 'function' || graphemeLength('👨‍👩‍👧') !== 1 || facet.index.byteStart !== 6 || validateWidgetContent(widget).length > 0 || reason !== 'network') {
+                process.exit(1);
+              }
+              console.log('modules load, graphemes and facets are right, a widget is valid, no network is a clean error');
+            "

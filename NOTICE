@@ -1,0 +1,28 @@
+Gladys Bluesky integration
+Copyright 2026 William Deren
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+It talks to the official XRPC API of the AT Protocol (https://docs.bsky.app,
+lexicons of https://github.com/bluesky-social/atproto) with an app password
+of one Bluesky account. This integration is unofficial: it is not affiliated
+with nor endorsed by Bluesky Social PBC. Bluesky and the butterfly logo are
+trademarks of Bluesky Social PBC.
+
+The butterfly of the cover (docs/assets/cover.svg, cover.jpg) is the official
+Bluesky logo, its path copied unchanged from
+https://github.com/bluesky-social/social-app/blob/main/bskyembed/assets/logo.svg
+(repository under the MIT License; the logo itself remains a trademark of
+Bluesky Social PBC). The rest of the cover is an illustration.
+
+It depends on:
+  - @gladysassistant/integration-sdk (Apache License 2.0).
+
+Design inspiration, read only, no code copied:
+  - the documentation of Bluesky (docs.bsky.app): rich text facets in UTF-8
+    bytes, rate limits, API hosts and the chat proxy;
+  - the official app bluesky-social/social-app (MIT License): the polling of
+    chat.bsky.convo.getLog by `rev`, and the "Bad token method" answer of an
+    app password without access to direct messages;
+  - the Slack integration for Gladys of the same author: linking a chat
+    account with a code sent in a direct message.
