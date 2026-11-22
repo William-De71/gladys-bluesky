@@ -5,6 +5,12 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions
 follow [Semantic Versioning](https://semver.org/). This file is generated at
 each release from the Conventional Commits: do not edit it by hand.
 
+## [0.1.1] - 2026-11-22
+
+### Fixed
+
+- keep a renewed session when the integration stops ([41e899f](https://github.com/William-De71/gladys-bluesky/commit/41e899fa3f050c3eb6860f1674c963d6a296653d))
+
 ## [0.1.0] - 2026-11-01
 
 ### Added
@@ -15,4 +21,5 @@ each release from the Conventional Commits: do not edit it by hand.
 - **widgets:** the account (followers, follows, posts, unread notifications, activity of the day, connection and a "Check" button), the last notifications, and the last direct messages with their text only on demand
 - **i18n:** English, French, German and Spanish for the manifest, the runtime texts, the documentation and the README
 
+[0.1.1]: https://github.com/William-De71/gladys-bluesky/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/William-De71/gladys-bluesky/releases/tag/v0.1.0

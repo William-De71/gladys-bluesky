@@ -1,6 +1,6 @@
 {
   "name": "gladys-bluesky",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Unofficial Gladys Assistant external integration for Bluesky: talk to Gladys in direct messages, post from scenes, scene triggers on mentions, replies and followers, dashboard widgets. Not affiliated with Bluesky Social PBC.",
   "homepage": "https://github.com/William-De71/gladys-bluesky",
