@@ -271,14 +271,27 @@ function createStore({ dir = DEFAULT_DIR, now = () => Date.now(), logger }) {
           pdsUrl: session.pdsUrl,
           fingerprint: session.fingerprint,
         };
-        sessionWrites = sessionWrites.then(() => writeJson(sessionPath, body));
-        return sessionWrites;
+        const write = sessionWrites.then(() => writeJson(sessionPath, body));
+        // A failed write must not block the next ones: the queue keeps going.
+        sessionWrites = write.catch(() => {});
+        return write;
       },
       /** @returns {Promise<void>} */
       clear() {
-        sessionWrites = sessionWrites.then(() => rm(sessionPath, { force: true }));
-        return sessionWrites;
+        const write = sessionWrites.then(() => rm(sessionPath, { force: true }));
+        sessionWrites = write.catch(() => {});
+        return write;
       },
+    },
+
+    /**
+     * @description Write the state and wait for the pending session writes
+     * (a renewed token saved in the background must not be lost at a stop).
+     * @returns {Promise<void>} Resolves once everything is written (or failed).
+     */
+    async flush() {
+      await this.save();
+      await sessionWrites;
     },
   };
 }

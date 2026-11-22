@@ -1263,7 +1263,7 @@ function createApp(
         Promise.all([reading.catch(() => {}), ...background]),
         new Promise((resolve) => setTimeout(resolve, 3000).unref()),
       ]);
-      await store.save();
+      await store.flush();
     },
     store,
     api,

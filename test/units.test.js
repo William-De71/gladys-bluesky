@@ -2,7 +2,7 @@
 // session helpers, images, event data, the store. No network.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, rm, readFile, writeFile } from 'node:fs/promises';
+import { mkdtemp, mkdir, rm, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -347,6 +347,35 @@ test('store: counters of the day, seen notifications, cursor, another account, b
     await broken.load();
     assert.equal(broken.hasReference(), false);
     assert.equal(await broken.session.load(), null);
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test('store: a failed session write does not block the next ones; flush waits for them', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'gladys-bluesky-store-'));
+  const session = {
+    did: SELF.did,
+    handle: 'home-gladys.bsky.social',
+    accessJwt: 'not-a-real-access-token',
+    refreshJwt: 'not-a-real-refresh-token',
+    pdsUrl: 'https://pds.example.test',
+    fingerprint: 'fingerprint',
+  };
+  try {
+    const store = createStore({ dir, logger: quiet });
+    await store.load();
+    // A folder where the file should be: the rename fails.
+    await mkdir(join(dir, 'session.json'));
+    await assert.rejects(store.session.save(session));
+    await rm(join(dir, 'session.json'), { recursive: true });
+    await store.session.save(session);
+    assert.equal((await store.session.load()).refreshJwt, 'not-a-real-refresh-token');
+    // A write left in the background (as after a refreshSession) ends before flush resolves.
+    store.session.save({ ...session, refreshJwt: 'not-a-real-rotated-token' });
+    await store.flush();
+    const file = JSON.parse(await readFile(join(dir, 'session.json'), 'utf8'));
+    assert.equal(file.refreshJwt, 'not-a-real-rotated-token');
   } finally {
     await rm(dir, { recursive: true, force: true });
   }
